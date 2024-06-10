@@ -4,9 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 const app = express();
-const MONGO_URI =
-  process.env.MONGO_URI ||
-  "mongodb+srv://krtburak:Test1234.@clustersosyal.yolrgji.mongodb.net/socialDB?retryWrites=true&w=majority&appName=ClusterSosyal";
+const MONGO_URI = process.env.MONGO_URI || "";
 const PORT = process.env.PORT || 4000;
 
 // json veri göndeririken veriyi pars eder
