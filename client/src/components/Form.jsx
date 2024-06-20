@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Button, Typography, Paper } from "@mui/material";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { createPost } from "../actions/posts";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost, updatePost } from "../actions/posts";
 
-const Form = () => {
+const Form = ({ currentId, setCurrentId }) => {
   const initialFormValues = {
     creator: "",
     title: "",
@@ -15,16 +15,36 @@ const Form = () => {
   const [postData, setPostData] = useState(initialFormValues);
 
   const dispatch = useDispatch();
+  const post = useSelector((state) =>
+    currentId
+      ? state.postsReducers.find((post) => post._id === currentId)
+      : null
+  );
+
+  useEffect(() => {
+    if (post) {
+      setPostData(post);
+    }
+  }, [post]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await dispatch(createPost(postData));
-    if (data) {
-      setPostData(initialFormValues);
-      alert("Post eklendi.");
+
+    if (currentId) {
+      dispatch(updatePost(currentId, postData));
+      alert("Post güncellendi.");
     } else {
-      alert("Post oluşturulamadı.");
+      const data = await dispatch(createPost(postData));
+      if (data) {
+        alert("Post eklendi.");
+      } else {
+        alert("Post oluşturulamadı.");
+      }
     }
+
+    setCurrentId(null);
+
+    setPostData(initialFormValues);
   };
 
   return (
@@ -44,7 +64,7 @@ const Form = () => {
         onSubmit={handleSubmit}
       >
         <Typography sx={{ marginBottom: "10px" }} variant="h6">
-          POST EKLE
+          {currentId ? "POST GÜNCELLE" : "POST EKLE"}
         </Typography>
         <TextField
           sx={{ margin: "5px" }}
@@ -108,7 +128,7 @@ const Form = () => {
           type="submit"
           fullWidth
         >
-          Ekle
+          {currentId ? "GÜNCELLE" : "EKLE"}
         </Button>
         <Button
           sx={{ marginBottom: "10px" }}

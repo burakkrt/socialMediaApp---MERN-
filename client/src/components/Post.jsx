@@ -11,8 +11,29 @@ import { ThumbUp, Delete, MoreHoriz } from "@mui/icons-material";
 
 import moment from "moment";
 import "moment/locale/tr";
+import { useDispatch } from "react-redux";
+import { deletePost } from "../actions/posts";
 
-export default function Post({ post }) {
+export default function Post({ post, setCurrentId }) {
+  const dispatch = useDispatch();
+
+  const hanleSelect = () => {
+    setCurrentId(post._id);
+  };
+
+  const handleDelete = () => {
+    dispatch(deletePost(post._id));
+    alert("Post başarılı bir şekilde silindi.");
+  };
+
+  const cardOptions = {
+    title: post.title,
+  };
+
+  if (post.selectedFile) {
+    cardOptions.image = post.selectedFile;
+  }
+
   return (
     <Card
       sx={{
@@ -28,12 +49,11 @@ export default function Post({ post }) {
       <CardMedia
         sx={{
           height: 0,
-          paddingTop: "26.25%",
+          paddingTop: "46.25%",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           backgroundBlendMode: "darken",
         }}
-        image={post.selectedFile}
-        title={post.title}
+        {...cardOptions}
       />
       <div
         style={{
@@ -57,23 +77,28 @@ export default function Post({ post }) {
             color: "white",
           }}
           size="large"
-          onClick={() => {}}
+          onClick={hanleSelect}
         >
           <MoreHoriz />
         </Button>
       </div>
-      <div>
-        <Typography
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            margin: "12px 18px",
-          }}
-          variant="p"
-          color="darkgray"
-        >
-          {post.tags.map((tag) => `#${tag} `)}
-        </Typography>
+      <div
+        style={{
+          display: "flex",
+          columnGap: "6px",
+          margin: "12px 18px",
+        }}
+      >
+        {post.tags.map((tag, index) => (
+          <Typography
+            variant="span"
+            color="#5A72A0"
+            fontWeight="semibold"
+            key={index}
+          >
+            #{tag.trim()}
+          </Typography>
+        ))}
       </div>
       <Typography
         sx={{ padding: "0px 18px" }}
@@ -84,7 +109,7 @@ export default function Post({ post }) {
         {post.title}
       </Typography>
       <CardContent sx={{ padding: "12px 18px" }}>
-        <Typography variant="p" color="darkgray">
+        <Typography variant="p" color="#0C1844">
           {post.message}
         </Typography>
       </CardContent>
@@ -105,7 +130,7 @@ export default function Post({ post }) {
           <ThumbUp fontSize="small" />
           {post.likeCount}
         </Button>
-        <Button size="small" color="error" onClick={() => {}}>
+        <Button size="small" color="error" onClick={handleDelete}>
           <Delete fontSize="small" />
         </Button>
       </CardActions>
