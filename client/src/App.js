@@ -4,6 +4,7 @@ import Form from "./components/Form";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPosts } from "./actions/posts";
+import { Navbar } from "./components/Navbar";
 
 function App() {
   const disspatch = useDispatch();
@@ -18,19 +19,8 @@ function App() {
       maxWidth="lg"
       sx={{ backgroundColor: "#322C2B", padding: "24px", color: "white" }}
     >
-      <AppBar
-        sx={{
-          marginBottom: "24px",
-          backgroundColor: "#973131",
-          position: "static",
-          color: "white",
-          padding: "8px 0",
-        }}
-      >
-        <Typography variant="h2" align="center">
-          SOSYAL MEDYA MERN APP
-        </Typography>
-      </AppBar>
+      <Navbar />
+
       <Grow in style={{ minHeight: "84vh" }}>
         <Grid
           container
