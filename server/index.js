@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
+import "dotenv/config";
 
 import postRouter from "./routes/posts.js";
 
@@ -13,9 +14,7 @@ app.use(cors());
 
 app.use("/post", postRouter);
 
-const MONGO_URI =
-  process.env.MONGO_URI ||
-  "mongodb+srv://krtburak:Test1234.@clustersosyal.yolrgji.mongodb.net/socialDB?retryWrites=true&w=majority&appName=ClusterSosyal";
+const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT || 4000;
 
 mongoose
