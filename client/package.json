@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "porxy": "http://localhost:4000",
+  "porxy": "https://socialmediaapp-mern.onrender.com/post",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
