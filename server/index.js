@@ -1,26 +1,30 @@
-import bodyParser from "body-parser";
 import express from "express";
+import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 
+import postRouter from "./routes/posts.js";
+
 const app = express();
-const MONGO_URI = process.env.MONGO_URI || "";
-const PORT = process.env.PORT || 4000;
 
-// json veri göndeririken veriyi pars eder
-app.use(bodyParser.json());
-
-//form urlencoded ile veri göndermek için veriyi pars eder.
-// en fazla 30mb lık veri, extended ile şifrelenmiş urller üzerinde de bodyparser kullanmak için.
+app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(cors());
+
+app.use("/post", postRouter);
+
+const MONGO_URI =
+  process.env.MONGO_URI ||
+  "mongodb+srv://krtburak:Test1234.@clustersosyal.yolrgji.mongodb.net/socialDB?retryWrites=true&w=majority&appName=ClusterSosyal";
+const PORT = process.env.PORT || 4000;
 
 mongoose
   .connect(MONGO_URI)
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Connected database.");
+      console.log(`Database connected, port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.log(err);
+    console.log(`Database not connected, Error : ${err}`);
   });
